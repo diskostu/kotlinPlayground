@@ -13,6 +13,9 @@ fun main() {
 
 class TicTacToe(private val input: String) {
 
+    // 01236
+    private val validThreeInARow = listOf("012", "345", "678", "036", "147", "258", "048", "246")
+
     fun validateInput() {
         if (!input.matches(Regex("[XO_ ]{9}")))
             throw IllegalArgumentException("invalid input: $input")
@@ -32,29 +35,52 @@ class TicTacToe(private val input: String) {
 
     fun validateGameState(): String {
         // impossible 1: far more X than O or vice versa
-        if (abs(input.count { it == 'X' } - input.count { it == 'O' }) > 1) {
+        val impossible1 = abs(input.count { it == 'X' } - input.count { it == 'O' }) > 1
+        val impossible2 = getThreeInARowCount('X') == 1 && getThreeInARowCount('O') == 1
+        if (impossible1 || impossible2) {
             return "Impossible"
         }
 
-        TODO("check more conditions")
+        if (getThreeInARowCount('X') == 0 && getThreeInARowCount('O') == 0) {
+            return if (hasEmptyCells()) "Game not finished" else "Draw"
+        }
+
+        if (getThreeInARowCount('X') == 1) return "X wins"
+        if (getThreeInARowCount('O') == 1) return "O wins"
+
+        TODO("missed at least 1 condition: $input")
     }
 
-    fun threeInARow(gameString: CharArray, playerSign: Char): Int {
 
-        // XXX______ 012
-        // ___XXX___ 345
-        // ______XXX 678
-        // X__X__X__ 036
-        // _X__X__X_ 147
-        // __X__X__X 258
-        // X___X___X 048
-        // __X_X_X__ 246
+    fun getThreeInARowCount(playerSign: Char): Int {
 
-        // OXXXOOXXO
-        // OXX
-        // X00
-        // XXO
+        val charArray = input.toCharArray()
+        var indexString = ""
+        for (i in 0..charArray.lastIndex) {
+            if (charArray[i] == playerSign) {
+                indexString += i
+            }
+        }
 
-        return 0
+        var threeInARowCount = 0
+        for (s in validThreeInARow) {
+            val validRowAsArray = s.toCharArray()
+
+            val matchCount = validRowAsArray.filter { it in indexString }.count()
+
+            if (matchCount == 3) {
+                threeInARowCount++
+            }
+        }
+
+        return threeInARowCount
+    }
+
+
+    fun hasEmptyCells(): Boolean {
+        // regex does not work - why?
+        //return input.matches(Regex("[_ ]"))
+
+        return input.contains("_") || input.contains(' ')
     }
 }
