@@ -36,10 +36,6 @@ class TicTacToe(private val input: String) {
             return "Impossible"
         }
 
-        if ()
-
-
-
         TODO("check more conditions")
     }
 
