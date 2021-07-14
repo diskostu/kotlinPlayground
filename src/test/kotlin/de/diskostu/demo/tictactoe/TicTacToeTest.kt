@@ -1,21 +1,21 @@
 package de.diskostu.demo.tictactoe
 
-import org.assertj.core.api.Assertions.*
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
-internal class TicTacToeTest {
+class TicTacToeTest {
 
     @Nested
     inner class ValidateInput {
-
-        @ParameterizedTest
-        @CsvSource("XXXOOOXXC", "XXXOOOXX")
-        fun `should show invalid input`(input: String) {
+        @Test
+        fun `should show invalid input because empty`() {
             // arrange
+            val input = " "
 
             // act
             val ticTacToe = TicTacToe(input)
@@ -27,10 +27,10 @@ internal class TicTacToeTest {
                 .hasMessageContainingAll("invalid", "input", input)
         }
 
-        @Test
-        fun `should show invalid input because empty`() {
+        @ParameterizedTest
+        @CsvSource("XXXOOOXXC", "XXXOOOXX")
+        fun `should show invalid input`(input: String) {
             // arrange
-            val input = " "
 
             // act
             val ticTacToe = TicTacToe(input)
