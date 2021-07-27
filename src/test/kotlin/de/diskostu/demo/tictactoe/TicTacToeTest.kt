@@ -87,7 +87,7 @@ class TicTacToeTest {
             val gameState = TicTacToe(input).validateGameState()
 
             // assert
-            assertThat(gameState).isEqualTo("Game not finished")
+            assertThat(gameState).isEqualTo("")
         }
 
 
@@ -222,6 +222,82 @@ class TicTacToeTest {
 
             // assert
             assertThat(hasEmptyCells).isFalse
+        }
+    }
+
+    @Nested
+    inner class GetCharForCoordinates {
+        @ParameterizedTest
+        @CsvSource("1,1,0", "1,2,1", "1,3,2", "2,1,3", "2,2,4", "2,3,5", "3,1,6", "3,2,7", "3,3,8")
+        fun `should get correct char for coordinates`(vertical: Int, horizontal: Int, expectedIndex: Int) {
+            // arrange
+
+            // act
+            val indexForCoordinates = TicTacToe("_________").getInputIndexForCoordinates(vertical, horizontal)
+
+            // assert
+            assertThat((indexForCoordinates == expectedIndex))
+        }
+    }
+
+
+    @Nested
+    inner class ValidateNextMove {
+
+        @ParameterizedTest
+        @CsvSource("one,one one")
+        fun `should show that coordinates are not numeric`(input: String) {
+            // arrange
+
+            // act
+            val validateNextMove = TicTacToe("XXXOOO___").validateNextMove(input)
+
+            // assert
+            assertThat(validateNextMove).isEqualTo("You should enter numbers!")
+        }
+
+
+        @ParameterizedTest
+        @CsvSource("2 5,4 1,6 6")
+        fun `should show the coordinates have the wrong values`(input: String) {
+            // arrange
+
+            // act
+            val validateNextMove = TicTacToe("XXXOOO___").validateNextMove(input)
+
+            // assert
+            assertThat(validateNextMove).isEqualTo("Coordinates should be from 1 to 3!")
+        }
+
+
+        @ParameterizedTest
+        @CsvSource("XXXOOO___,1 1", "XXXOOO___,2 1", "XXXOOO___,2 3", "XXXOOO__X,3 3")
+        fun `should show that cell is occupied`(gameState: String, input: String) {
+            // arrange
+
+            // act
+            val validateNextMove = TicTacToe(gameState).validateNextMove(input)
+
+            // assert
+            assertThat(validateNextMove).isEqualTo("This cell is occupied! Choose another one!")
+        }
+    }
+
+
+    @Nested
+    inner class UpdateGameState {
+
+        @ParameterizedTest
+        @CsvSource("XX_OO____,1 3,XXXOO____", "XX_OO____,2 3,XX_OOX___", "XX_OO____,3 3,XX_OO___X")
+        fun `should `(gameState: String, nextMove: String, expectedGameState: String) {
+            // arrange
+
+            // act
+            val ticTacToe = TicTacToe(gameState)
+            ticTacToe.updateGameState(nextMove)
+
+            // assert
+            assertThat(ticTacToe.getGameState()).isEqualTo(expectedGameState)
         }
     }
 }

@@ -1,5 +1,6 @@
 package de.diskostu.demo.tictactoe
 
+import java.lang.IllegalStateException
 import kotlin.math.abs
 
 fun main() {
@@ -8,17 +9,49 @@ fun main() {
 
     ticTacToe.validateInput()
     println(ticTacToe.generateBoardString())
-    println(ticTacToe.validateGameState())
+
+    val gameState = ticTacToe.validateGameState()
+    if (gameState.isNotBlank()) println(gameState)
+
+    var nextMove: String
+    do {
+        print("Enter the coordinates: ")
+        nextMove = readLine()!!
+        val validatedMove = ticTacToe.validateNextMove(nextMove)
+        if(validatedMove.isNotBlank()) println(validatedMove)
+    } while (validatedMove.isNotBlank())
+
+    ticTacToe.updateGameState(nextMove)
+
+    println(ticTacToe.generateBoardString())
 }
 
-class TicTacToe(private val input: String) {
+class TicTacToe(private var gameState: String) {
 
-    // 01236
     private val validThreeInARow = listOf("012", "345", "678", "036", "147", "258", "048", "246")
 
     fun validateInput() {
-        if (!input.matches(Regex("[XO_ ]{9}")))
-            throw IllegalArgumentException("invalid input: $input")
+        if (!gameState.matches(Regex("[XO_ ]{9}")))
+            throw IllegalArgumentException("invalid input: $gameState")
+    }
+
+
+    fun validateGameState(): String {
+        // impossible 1: far more X than O or vice versa
+        val impossible1 = abs(gameState.count { it == 'X' } - gameState.count { it == 'O' }) > 1
+        val impossible2 = getThreeInARowCount('X') == 1 && getThreeInARowCount('O') == 1
+        if (impossible1 || impossible2) {
+            return "Impossible"
+        }
+
+        if (getThreeInARowCount('X') == 0 && getThreeInARowCount('O') == 0) {
+            return if (hasEmptyCells()) "" else "Draw"
+        }
+
+        if (getThreeInARowCount('X') == 1) return "X wins"
+        if (getThreeInARowCount('O') == 1) return "O wins"
+
+        throw IllegalStateException("missed at least 1 condition: $gameState")
     }
 
 
@@ -26,35 +59,56 @@ class TicTacToe(private val input: String) {
         var boardString = "---------\n"
 
         for (i in 0..2) {
-            boardString += "| ${input[i * 3]} ${input[i * 3 + 1]} ${input[i * 3 + 2]} |\n"
+            boardString += "| ${gameState[i * 3]} ${gameState[i * 3 + 1]} ${gameState[i * 3 + 2]} |\n"
         }
 
         return "$boardString---------"
     }
 
 
-    fun validateGameState(): String {
-        // impossible 1: far more X than O or vice versa
-        val impossible1 = abs(input.count { it == 'X' } - input.count { it == 'O' }) > 1
-        val impossible2 = getThreeInARowCount('X') == 1 && getThreeInARowCount('O') == 1
-        if (impossible1 || impossible2) {
-            return "Impossible"
+    fun validateNextMove(nextMoveFromUser: String): String {
+        val newCoordinates = nextMoveFromUser.split(" ")
+
+        var isOnlyDigits = true
+        newCoordinates.forEach {
+            if (it.all { !it.isDigit() }) {
+                isOnlyDigits = false
+            }
+        }
+        if (!isOnlyDigits) {
+            return "You should enter numbers!"
         }
 
-        if (getThreeInARowCount('X') == 0 && getThreeInARowCount('O') == 0) {
-            return if (hasEmptyCells()) "Game not finished" else "Draw"
+        val (vertical, horizontal) = newCoordinates
+        if (vertical !in "123" || horizontal !in "123") {
+            return "Coordinates should be from 1 to 3!"
         }
 
-        if (getThreeInARowCount('X') == 1) return "X wins"
-        if (getThreeInARowCount('O') == 1) return "O wins"
+        val indexForCoordinates = getInputIndexForCoordinates(vertical.toInt(), horizontal.toInt())
+        if (gameState[indexForCoordinates] !in "_ ") {
+            return "This cell is occupied! Choose another one!"
+        }
 
-        TODO("missed at least 1 condition: $input")
+        return ""
+    }
+
+
+    fun updateGameState(nextMoveFromUser: String) {
+        val map = nextMoveFromUser.split(" ").map { it.toInt() }
+        val toCharArray = gameState.toCharArray()
+        toCharArray[getInputIndexForCoordinates(map[0], map[1])] = 'X'
+        gameState = toCharArray.concatToString()
+    }
+
+
+    fun getGameState():String {
+        return gameState
     }
 
 
     fun getThreeInARowCount(playerSign: Char): Int {
 
-        val charArray = input.toCharArray()
+        val charArray = gameState.toCharArray()
         var indexString = ""
         for (i in 0..charArray.lastIndex) {
             if (charArray[i] == playerSign) {
@@ -66,7 +120,7 @@ class TicTacToe(private val input: String) {
         for (s in validThreeInARow) {
             val validRowAsArray = s.toCharArray()
 
-            val matchCount = validRowAsArray.filter { it in indexString }.count()
+            val matchCount = validRowAsArray.count { it in indexString }
 
             if (matchCount == 3) {
                 threeInARowCount++
@@ -81,6 +135,10 @@ class TicTacToe(private val input: String) {
         // regex does not work - why?
         //return input.matches(Regex("[_ ]"))
 
-        return input.contains("_") || input.contains(' ')
+        return gameState.contains("_") || gameState.contains(' ')
+    }
+
+    fun getInputIndexForCoordinates(vertical: Int, horizontal: Int): Int {
+        return (vertical - 1) * 3 + horizontal - 1
     }
 }
