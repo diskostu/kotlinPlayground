@@ -30,7 +30,7 @@ fun demoWithIterable(): List<Int> {
 
 /**
  * The output shows that processing does NOT start while creating the sequence. It starts when
- * the final result is requested (in the "main"-method). It is also visible that each element of
+ * the final result is requested (in the "de.diskostu.demo.delegatedProperties.main"-method). It is also visible that each element of
  * the sequence is processed with the functions "filter", "map" and "take", and only then the
  * next element is processed. Processing stops when 4 elements were taken, the rest of the
  * sequence will be ignored.
