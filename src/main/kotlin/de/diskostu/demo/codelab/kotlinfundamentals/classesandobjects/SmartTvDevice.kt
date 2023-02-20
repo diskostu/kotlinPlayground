@@ -9,14 +9,14 @@ class SmartTvDevice(deviceName: String, deviceCategory: String) :
     SmartDevice(name = deviceName, category = deviceCategory) {
 
     override val deviceType = "Smart TV"
-    
-    var speakerVolume: Int = 2
+
+    private var speakerVolume: Int = 2
         set(value) {
             if (value in VOL_MIN..VOL_MAX) field =
                 value else println("Speaker max volume is $VOL_MAX.")
         }
 
-    var channelNumber: Int = CHANNEL_MIN
+    private var channelNumber: Int = CHANNEL_MIN
         set(value) {
             if (value in CHANNEL_MIN..CHANNEL_MAX) field =
                 value else throw IllegalArgumentException("Channel number has to be between $CHANNEL_MIN and $CHANNEL_MAX (was $value).")
@@ -68,8 +68,6 @@ class SmartTvDevice(deviceName: String, deviceCategory: String) :
 
 fun main() {
     val lala = SmartTvDevice("My Smart TV", "Entertainment")
-    lala.speakerVolume = 99
-    lala.channelNumber = 198
 
     lala.increaseSpeakerVolume()
     lala.increaseSpeakerVolume()

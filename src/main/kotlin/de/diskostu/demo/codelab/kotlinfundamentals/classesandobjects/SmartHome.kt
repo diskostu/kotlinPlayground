@@ -1,16 +1,21 @@
 package de.diskostu.demo.codelab.kotlinfundamentals.classesandobjects
 
 class SmartHome(
-    val smartTvDevice: SmartTvDevice,
-    val smartLightDevice: SmartLightDevice
+    private val smartTvDevice: SmartTvDevice,
+    private val smartLightDevice: SmartLightDevice
 ) {
+
+    var deviceTurnOnCount = 0
+        private set
 
     fun turnOnTv() {
         smartTvDevice.turnOn()
+        deviceTurnOnCount++
     }
 
     fun turnOffTv() {
         smartTvDevice.turnOff()
+        deviceTurnOnCount--
     }
 
 
@@ -25,11 +30,13 @@ class SmartHome(
 
     fun turnOnLight() {
         smartLightDevice.turnOn()
+        deviceTurnOnCount++
     }
 
 
     fun turnOffLight() {
         smartLightDevice.turnOff()
+        deviceTurnOnCount--
     }
 
 

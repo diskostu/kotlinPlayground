@@ -12,12 +12,14 @@ fun main() {
     smartDevice.turnOn()
 }
 
-open class SmartDevice(val name: String, val category: String) {
+open class SmartDevice protected constructor(val name: String, val category: String) {
 
     var deviceStatus: String = DEVICE_STATUS_ON
+        protected set
 
     open val deviceType = "unknown"
 
+    // example for a secondary constructor
     constructor(name: String, category: String, statusCode: Int) : this(name, category) {
         deviceStatus = when (statusCode) {
             0 -> DEVICE_STATUS_OFF
@@ -25,6 +27,7 @@ open class SmartDevice(val name: String, val category: String) {
             else -> "unknown"
         }
     }
+
 
     open fun turnOn() {
         deviceStatus = DEVICE_STATUS_ON
