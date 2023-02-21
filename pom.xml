@@ -66,7 +66,7 @@
     <dependencies>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test-junit5</artifactId>
+                <artifactId>kotlin-test-junit5</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
@@ -75,7 +75,7 @@
             <artifactId>junit-jupiter-params</artifactId>
             <!-- better match the JUnit5-version which comes with org.jetbrains.kotlin:kotlin-test-junit5 -->
             <!--suppress MavenPackageUpdate -->
-            <version>5.9.2</version>
+            <version>5.6.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
