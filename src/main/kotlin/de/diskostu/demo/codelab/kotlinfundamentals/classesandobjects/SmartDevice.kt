@@ -39,7 +39,8 @@ open class SmartDevice protected constructor(val name: String, val category: Str
         println("$name is turned off.")
     }
 
-    fun printStatus() {
-        println("The device \"$name\" has the status \"$deviceStatus\".")
+
+    fun printDeviceInfo() {
+        println("Device name: $name, category: $category, type: $deviceType")
     }
 }

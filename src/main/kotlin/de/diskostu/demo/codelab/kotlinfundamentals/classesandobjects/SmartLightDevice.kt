@@ -35,6 +35,17 @@ class SmartLightDevice(deviceName: String, deviceCategory: String) :
     }
 
 
+    fun decreaseBrightness() {
+        if (brightnessLevel == brightnessMin) {
+            println("Brightness level is already min ($brightnessMin).")
+            return
+        }
+
+        brightnessLevel--
+        println("Brightness level decreased to $brightnessLevel.")
+    }
+
+
     fun setMaxBrightness() {
         brightnessLevel = brightnessMax
 

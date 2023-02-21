@@ -23,8 +23,18 @@ class SmartHome(
         smartTvDevice.increaseSpeakerVolume()
     }
 
+
+    fun decreaseTvVolume() {
+        smartTvDevice.decreaseSpeakerVolume()
+    }
+
     fun changeTvChannelToNext() {
         smartTvDevice.nextChannel()
+    }
+
+
+    fun changeTvChannelToPrevious() {
+        smartTvDevice.previousChannel()
     }
 
 
@@ -45,8 +55,30 @@ class SmartHome(
     }
 
 
+    fun decreaseLightBrightness() {
+        smartLightDevice.decreaseBrightness()
+    }
+
+
     fun turnOffAllDevices() {
         turnOffTv()
         turnOffLight()
     }
+}
+
+fun main() {
+    val mySmartHome = SmartHome(
+        SmartTvDevice("My Smart TV", "Entertainment"),
+        SmartLightDevice("My Smart Lamp", "Lighting")
+    )
+
+    println("Currently, there are ${mySmartHome.deviceTurnOnCount} devices turned on.")
+
+    mySmartHome.turnOnTv()
+    mySmartHome.turnOnLight()
+
+    mySmartHome.changeTvChannelToNext()
+
+    println("Currently, there are ${mySmartHome.deviceTurnOnCount} devices turned on.")
+
 }

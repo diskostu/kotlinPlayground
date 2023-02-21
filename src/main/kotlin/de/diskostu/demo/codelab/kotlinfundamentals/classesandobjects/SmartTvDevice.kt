@@ -39,6 +39,22 @@ class SmartTvDevice(deviceName: String, deviceCategory: String) :
     }
 
 
+    fun decreaseSpeakerVolume() {
+        if (deviceStatus == DEVICE_STATUS_OFF) {
+            println("Cannot decrease volume because $name is turned off. Turn it on first.")
+            return
+        }
+
+        if (speakerVolume == VOL_MIN) {
+            println("Speaker volume is already min ($VOL_MIN).")
+            return
+        }
+
+        speakerVolume--
+        println("Speaker volume decreased to $speakerVolume.")
+    }
+
+
     fun nextChannel() {
         if (deviceStatus == DEVICE_STATUS_OFF) {
             println("Cannot switch to the next channel because $name is turned off. Turn it on first.")
@@ -54,21 +70,21 @@ class SmartTvDevice(deviceName: String, deviceCategory: String) :
         channelNumber++
         println("Current channel is now $channelNumber.")
     }
-}
 
 
-fun main() {
-    val mySmartHome = SmartHome(
-        SmartTvDevice("My Smart TV", "Entertainment"),
-        SmartLightDevice("My Smart Lamp", "Lighting")
-    )
+    fun previousChannel() {
+        if (deviceStatus == DEVICE_STATUS_OFF) {
+            println("Cannot switch to the previous channel because $name is turned off. Turn it on first.")
+            return
+        }
 
-    println("Currently, there are ${mySmartHome.deviceTurnOnCount} devices turned on.")
+        if (channelNumber == CHANNEL_MIN) {
+            channelNumber = CHANNEL_MAX
+            println("Was at first channel, switched to channel $CHANNEL_MAX.")
+            return
+        }
 
-    mySmartHome.turnOnTv()
-    mySmartHome.turnOnLight()
-
-    mySmartHome.changeTvChannelToNext()
-
-    println("Currently, there are ${mySmartHome.deviceTurnOnCount} devices turned on.")
+        channelNumber--
+        println("Current channel is now $channelNumber.")
+    }
 }
