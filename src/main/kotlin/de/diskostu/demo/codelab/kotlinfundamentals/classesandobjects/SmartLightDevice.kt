@@ -8,13 +8,7 @@ class SmartLightDevice(deviceName: String, deviceCategory: String) :
 
     override val deviceType = "Smart Light"
 
-    private var brightnessLevel = brightnessMin
-        set(value) {
-            if (value in brightnessMin..brightnessMax) {
-                field = value
-            }
-        }
-
+    private var brightnessLevel by RangeRegulator(2, 0, 100)
 
     override fun turnOn() {
         super.turnOn()

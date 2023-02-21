@@ -10,17 +10,8 @@ class SmartTvDevice(deviceName: String, deviceCategory: String) :
 
     override val deviceType = "Smart TV"
 
-    private var speakerVolume: Int = 2
-        set(value) {
-            if (value in VOL_MIN..VOL_MAX) field =
-                value else println("Speaker max volume is $VOL_MAX.")
-        }
-
-    private var channelNumber: Int = CHANNEL_MIN
-        set(value) {
-            if (value in CHANNEL_MIN..CHANNEL_MAX) field =
-                value else throw IllegalArgumentException("Channel number has to be between $CHANNEL_MIN and $CHANNEL_MAX (was $value).")
-        }
+    private var speakerVolume by RangeRegulator(2, 0, 100)
+    private var channelNumber by RangeRegulator(1, 1, 200)
 
 
     override fun turnOn() {
@@ -67,17 +58,17 @@ class SmartTvDevice(deviceName: String, deviceCategory: String) :
 
 
 fun main() {
-    val lala = SmartTvDevice("My Smart TV", "Entertainment")
+    val mySmartHome = SmartHome(
+        SmartTvDevice("My Smart TV", "Entertainment"),
+        SmartLightDevice("My Smart Lamp", "Lighting")
+    )
 
-    lala.increaseSpeakerVolume()
-    lala.increaseSpeakerVolume()
-    lala.increaseSpeakerVolume()
+    println("Currently, there are ${mySmartHome.deviceTurnOnCount} devices turned on.")
 
-    lala.nextChannel()
-    lala.nextChannel()
-    lala.nextChannel()
+    mySmartHome.turnOnTv()
+    mySmartHome.turnOnLight()
 
-    lala.turnOff()
-    lala.nextChannel()
-    lala.increaseSpeakerVolume()
+    mySmartHome.changeTvChannelToNext()
+
+    println("Currently, there are ${mySmartHome.deviceTurnOnCount} devices turned on.")
 }
