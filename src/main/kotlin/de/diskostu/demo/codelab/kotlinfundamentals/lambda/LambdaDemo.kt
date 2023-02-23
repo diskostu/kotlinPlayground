@@ -1,4 +1,4 @@
-package de.diskostu.demo.lambda
+package de.diskostu.demo.codelab.kotlinfundamentals.lambda
 
 fun main() {
     // assigning functions to variables
