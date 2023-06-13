@@ -14,15 +14,26 @@ fun main() {
     println("answer2 = $answer2")
     println("answer3 = $answer3")
 
-    println("difficulty1 = ${genericQuestion1.difficulty}")
+    println("Answered questions: ${Quiz.answered} out of ${Quiz.total}")
 }
 
 
 /**
  * Instead of creating 3 different classes because the data type of "answer" can be different, we use Generics.
  */
-class GenericQuestion<T>(val questionText: String, val answer: T, val difficulty: Difficulty)
+data class GenericQuestion<T>(val questionText: String, val answer: T, val difficulty: Difficulty)
 
 enum class Difficulty {
     EASY, MEDIUM, HARD
+}
+
+class Quiz {
+    val question1 = GenericQuestion("Quoth the raven _____", "nevermore", Difficulty.MEDIUM)
+    val question2 = GenericQuestion("The sky is green. True or false", false, Difficulty.EASY)
+    val question3 = GenericQuestion("How many days are there between full moons?", 28, Difficulty.HARD)
+
+    companion object StudentProgress {
+        const val total = 10
+        const val answered = 3
+    }
 }
