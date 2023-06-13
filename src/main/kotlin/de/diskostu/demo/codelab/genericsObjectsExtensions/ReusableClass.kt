@@ -14,7 +14,7 @@ fun main() {
     println("answer2 = $answer2")
     println("answer3 = $answer3")
 
-    println("Answered questions: ${Quiz.answered} out of ${Quiz.total}")
+    println(Quiz.printProgressBar())
 }
 
 
@@ -36,4 +36,14 @@ class Quiz {
         const val total = 10
         const val answered = 3
     }
+}
+
+val Quiz.StudentProgress.progressText: String
+    get() = "$answered out of $total"
+
+fun Quiz.StudentProgress.printProgressBar() {
+    repeat(answered) { print("▓") }
+    repeat(total - answered) { print("▒") }
+    println()
+    println(progressText)
 }
