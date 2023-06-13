@@ -14,7 +14,11 @@ fun main() {
     println("answer2 = $answer2")
     println("answer3 = $answer3")
 
-    println(Quiz().printProgressBar())
+    // with "apply", we can chain methods without creating a field
+    Quiz().apply {
+        printQuiz()
+        printProgressBar()
+    }
 }
 
 
@@ -51,5 +55,16 @@ class Quiz : ProgressPrintable {
         repeat(total - answered) { print("▒") }
         println()
         println(progressText)
+    }
+
+    fun printQuiz() {
+        for (item in listOf(question1, question2, question3)) {
+            item.let {
+                println(it.questionText)
+                println(it.answer)
+                println(it.difficulty)
+                println()
+            }
+        }
     }
 }
