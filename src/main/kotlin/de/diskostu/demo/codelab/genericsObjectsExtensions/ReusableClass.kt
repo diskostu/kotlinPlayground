@@ -14,7 +14,7 @@ fun main() {
     println("answer2 = $answer2")
     println("answer3 = $answer3")
 
-    println(Quiz.printProgressBar())
+    println(Quiz().printProgressBar())
 }
 
 
@@ -27,7 +27,13 @@ enum class Difficulty {
     EASY, MEDIUM, HARD
 }
 
-class Quiz {
+interface ProgressPrintable {
+    val progressText: String
+
+    fun printProgressBar()
+}
+
+class Quiz : ProgressPrintable {
     val question1 = GenericQuestion("Quoth the raven _____", "nevermore", Difficulty.MEDIUM)
     val question2 = GenericQuestion("The sky is green. True or false", false, Difficulty.EASY)
     val question3 = GenericQuestion("How many days are there between full moons?", 28, Difficulty.HARD)
@@ -36,14 +42,14 @@ class Quiz {
         const val total = 10
         const val answered = 3
     }
-}
 
-val Quiz.StudentProgress.progressText: String
-    get() = "$answered out of $total"
+    override val progressText: String
+        get() = "$answered out of $total"
 
-fun Quiz.StudentProgress.printProgressBar() {
-    repeat(answered) { print("▓") }
-    repeat(total - answered) { print("▒") }
-    println()
-    println(progressText)
+    override fun printProgressBar() {
+        repeat(answered) { print("▓") }
+        repeat(total - answered) { print("▒") }
+        println()
+        println(progressText)
+    }
 }
