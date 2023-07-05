@@ -12,5 +12,7 @@ fun main() {
             valueTransform = { it.uppercase() })
     )
 
-    println("3: " + numbers.groupingBy { it.first() }.eachCount())
+    val groupingBy = numbers.groupingBy { it.first() }
+    val eachCount = groupingBy.eachCount()
+    println("3: $eachCount")
 }
