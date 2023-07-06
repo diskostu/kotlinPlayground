@@ -46,4 +46,17 @@ fun main() {
 
     // task 6
     println("Last event of the day: ${events.last().title}")
+
+    // task 7
+    println("Duration of first event of the day: ${events[0].durationOfEvent}")
 }
+
+/**
+ * Extension property for [Event]
+ */
+val Event.durationOfEvent: String
+    get() = if (this.durationInMinutes < 60) {
+        "short"
+    } else {
+        "long"
+    }
