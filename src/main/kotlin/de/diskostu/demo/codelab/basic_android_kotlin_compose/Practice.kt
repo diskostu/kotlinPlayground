@@ -37,9 +37,13 @@ fun main() {
     }
     println("shortEvents = $shortEvents")
 
+    // task 5
     events.groupBy {
         it.daypart
     }.forEach { (daypart, events) ->
         println("$daypart: ${events.size} events")
     }
+
+    // task 6
+    println("Last event of the day: ${events.last().title}")
 }
